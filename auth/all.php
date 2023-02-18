@@ -8,19 +8,20 @@
 
     $db = new Database();
 
-if($_SERVER['REQUEST_METHOD']== "GET") {
+    if($_SERVER['REQUEST_METHOD']== "GET") {
 
-
-    $db->select("users", "*", null, null, null, null);
-    $data = $db->getResult();
-    echo json_encode([
-        "status"=>"success",
-        "data" =>$data
-    ]);
-}
-else{
-    echo json_encode([
-        "status"=>"failed",
-        "message" =>"NOT FOUND endpoint"
-    ]);
-}
+        if($db->checkCredential()){
+            $db->select("users", "*", null, null, null, null);
+            $data = $db->getResult();
+            echo json_encode([
+                "status"=>"success",
+                "data" =>$data
+            ]);
+        }
+    }
+    else{
+        echo json_encode([
+            "status"=>"failed",
+            "message" =>"NOT FOUND endpoint"
+        ]);
+    }

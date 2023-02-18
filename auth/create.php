@@ -24,8 +24,6 @@
             return false;
         }
         else{
-            $headers = getallheaders();
-            $jwt =  $headers["Authorization"];
             if($db->checkCredential()){
                 $params = [
                     "user_name" => $username,

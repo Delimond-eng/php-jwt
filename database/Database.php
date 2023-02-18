@@ -14,6 +14,7 @@ class Database
     private $result = array();
     private $connection = false;
 
+
    /*
     * connect using constructed method
    */
@@ -35,10 +36,14 @@ class Database
     }
 
 
+    /*
+     * check authorization credential
+     * */
     public function checkCredential(){
         try {
             $headers = getallheaders();
-            if(isset($headers["Authorization"])){
+            $authorization = isset($headers["Authorization"]) !== null && isset($headers["Authorization"]);
+            if($authorization){
                 $jwt =  $headers["Authorization"];
                 $secret_key = "RTG1234";
                 $token =str_replace("Bearer ", "", $jwt);
@@ -67,7 +72,9 @@ class Database
     }
 
 
-    /*check if table exist*/
+    /*
+     * check existing table
+    */
     public function tableExist($table){
        $sql = "SHOW TABLES FROM $this->database LIKE '{$table}'";
        $tableInDb = $this->mysqli->query($sql);
@@ -84,7 +91,9 @@ class Database
         }
     }
 
-    /*insert data statment*/
+    /*
+     * INSERT statement
+     * */
     public function insert($table, $params = array()){
         if($this->tableExist($table)){
            $columns = implode(',', array_keys($params));
@@ -107,7 +116,9 @@ class Database
     }
 
 
-    /* update statment*/
+    /*
+     * UPDATE statement
+     * */
     public function update($table, $params=array(), $where=null){
         if ($this->tableExist($table)){
             foreach ($params as $key => $val){
@@ -128,7 +139,9 @@ class Database
         }
     }
 
-    /*DELETE statment*/
+    /*
+     * DELETE statement
+     * */
     public function delete($table, $where=null){
         if($this->tableExist($table)){
             $sql = "DELETE FROM $table";
@@ -150,7 +163,7 @@ class Database
     }
 
 
-    /*Get data select statment*/
+    /*Get data select statement*/
     public function select($table, $row="*", $join =null, $where=null, $order= null, $limit=null){
         if($this->tableExist($table)){
             $sql = "SELECT $row FROM $table";
